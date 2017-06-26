@@ -1,7 +1,8 @@
-package io.innofang.koolweather
+package io.innofang.koolweather.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import io.innofang.koolweather.R
 
 class MainActivity : AppCompatActivity() {
 
