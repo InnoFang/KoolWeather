@@ -7,12 +7,10 @@ package io.innofang.koolweather.db
  */
 
 class Province(val map: MutableMap<String, Any?>) {
-    var id: Int by map
     var provinceName: String by map
     var provinceCode: Int by map
 
     constructor(id: Int, provinceName: String, provinceCode: Int) : this(HashMap()) {
-        this.id = id;
         this.provinceCode = provinceCode
         this.provinceName = provinceName
     }
