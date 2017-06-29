@@ -1,6 +1,7 @@
 package io.innofang.koolweather.db
 
 import android.content.ContentValues
+import android.database.CursorWrapper
 import android.database.sqlite.SQLiteDatabase
 
 /**
@@ -14,13 +15,11 @@ class ForecastDbManager private constructor() {
     private var database: SQLiteDatabase? = null
 
     companion object {
-
-        fun getInstance(): ForecastDbManager = Inner.instance
+        fun instance(): ForecastDbManager = Inner.instance
     }
 
     private object Inner {
-
-        var instance = ForecastDbManager()
+        val instance = ForecastDbManager()
     }
 
     init {
@@ -37,6 +36,23 @@ class ForecastDbManager private constructor() {
         }
     }
 
+    fun getProvinces(): List<Province> {
+        val list = ArrayList<Province>()
+        val cursor = CursorWrapper(database!!.rawQuery("select * from " + ProvinceTable.NAME, null))
+
+        try {
+            cursor.moveToFirst()
+            while(!cursor.isAfterLast) {
+                list.add(Province(mutableMapOf(
+                        "provinceCode" to cursor.getInt(cursor.getColumnIndex(ProvinceTable.PROVINCE_CODE)),
+                        "provinceName" to cursor.getString(cursor.getColumnIndex(ProvinceTable.PROVINCE_NAME))
+                )))
+            }
+        } finally {
+            cursor.close()
+        }
+        return list
+    }
 
     private fun getContentValues(any: Any): ContentValues {
         val values = ContentValues()
@@ -64,4 +80,14 @@ class ForecastDbManager private constructor() {
         }
         return values
     }
+
+
+    private fun queryData(any: Any): CursorWrapper {
+        when (any) {
+            is Province -> return CursorWrapper(database!!.rawQuery("select * from " + ProvinceTable.NAME, null))
+            is City -> return CursorWrapper(database!!.rawQuery("select * from " + CityTable.NAME, null))
+            else -> return CursorWrapper(database!!.rawQuery("select * from " + CountyTable.NAME, null))
+        }
+    }
+
 }

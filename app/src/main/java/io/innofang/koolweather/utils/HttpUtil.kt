@@ -1,10 +1,12 @@
 package io.innofang.koolweather.utils
 
 import android.text.TextUtils
+import io.innofang.koolweather.db.ForecastDbManager
 import io.innofang.koolweather.db.Province
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
+import org.json.JSONException
 
 /**
  * Author: Inno Fang
@@ -23,13 +25,21 @@ class HttpUtil {
 
         fun handleProvinceResponse(response: String): Boolean {
             if (!TextUtils.isEmpty(response)) {
-                val allProvinces = JSONArray(response)
-                for (i in 0 until allProvinces.length()) {
-                    val provinceObject = allProvinces.getJSONObject(i)
-                    val province = Province(mutableMapOf(
-                            "provinceCode" to provinceObject.getString("id"),
-                            "provinceName" to provinceObject.getString("name")
-                    ))
+                try {
+                    val allProvinces = JSONArray(response)
+                    val manager = ForecastDbManager.instance()
+                    (0 until allProvinces.length())
+                            .map { allProvinces.getJSONObject(it) }
+                            .map {
+                                Province(mutableMapOf(
+                                        "provinceCode" to it.getString("id"),
+                                        "provinceName" to it.getString("name")
+                                ))
+                            }
+                            .forEach { manager.addData(it) }
+                    return true
+                } catch (e: JSONException) {
+                    e.printStackTrace()
                 }
             }
             return false
