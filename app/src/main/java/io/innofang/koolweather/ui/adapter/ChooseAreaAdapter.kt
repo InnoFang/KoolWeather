@@ -24,7 +24,7 @@ class ChooseAreaAdapter(var list: List<String>): RecyclerView.Adapter<ChooseArea
         holder!!.bindHolder(list[position])
     }
 
-    override fun getItemCount(): Int = list?.let { list.size } ?: 0
+    override fun getItemCount(): Int = list.size
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val itemTextView: TextView by lazy { itemView.findViewById(android.R.id.text1) as TextView }

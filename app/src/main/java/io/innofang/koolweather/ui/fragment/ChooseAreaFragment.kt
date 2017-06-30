@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import io.innofang.koolweather.App
 import io.innofang.koolweather.R
 import io.innofang.koolweather.base.BaseFragment
 import io.innofang.koolweather.constant.Cons
@@ -52,14 +55,14 @@ class ChooseAreaFragment : BaseFragment() {
     private var currentLevel: Int = 0
     override fun getLayoutResId(): Int = R.layout.fragment_choose_area
 
-    override fun createView(savedInstanceState: Bundle) {
-
-        weatherRecyclerView.layoutManager = LinearLayoutManager(activity)
+    override fun createView(savedInstanceState: Bundle?) {
+        weatherRecyclerView.layoutManager = LinearLayoutManager(context)
         weatherRecyclerView.adapter = adapter
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         val action = OnRecyclerItemListener(weatherRecyclerView)
         action.onItemClick = {
             if (it is ChooseAreaAdapter.ViewHolder) {
@@ -89,6 +92,7 @@ class ChooseAreaFragment : BaseFragment() {
         if (list.isNotEmpty()) {
             dataList.clear()
             list.forEach { dataList.add(it.provinceName) }
+            adapter.list = dataList
             adapter.notifyDataSetChanged()
             currentLevel = LEVEL_PROVINCE
         } else {
@@ -108,7 +112,7 @@ class ChooseAreaFragment : BaseFragment() {
         showProgressDialog()
         HttpUtil.sendOkHttpRequest(url, object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
-                val responseText = response!!.body().toString()
+                val responseText = response!!.body()!!.string()
                 var result = false
                 when (type) {
                     PROVINCE -> result = HttpUtil.handleProvinceResponse(responseText)
@@ -139,11 +143,12 @@ class ChooseAreaFragment : BaseFragment() {
     }
 
     private fun showProgressDialog() {
-        progressDialog?.show() ?: with(ProgressDialog(activity)) {
-            setMessage("正在加载中...")
-            setCanceledOnTouchOutside(false)
-            show()
+        if (null == progressDialog) {
+            progressDialog = ProgressDialog(activity)
+            progressDialog!!.setMessage("正在加载中...")
+            progressDialog!!.setCanceledOnTouchOutside(false)
         }
+        progressDialog?.show()
     }
 
     private fun closeProgressDialog() {

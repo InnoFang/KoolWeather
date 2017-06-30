@@ -18,7 +18,7 @@ import io.innofang.koolweather.utils.SQL
     companion object {
         val DB_NAME = "forecast.db"
         val DB_VERSION = 1
-        val instance by lazy { ForecastDbHelper() }
+//        val instance = ForecastDbHelper()
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -27,20 +27,21 @@ import io.innofang.koolweather.utils.SQL
                 .addTextCols(ProvinceTable.PROVINCE_NAME)
                 .addIntegerCols(ProvinceTable.PROVINCE_CODE)
                 .create())
-
-        db!!.execSQL(SQL.createTable(CityTable.NAME)
+/*
+        db.execSQL(SQL.createTable(CityTable.NAME)
                 .addIntegerColsWithPrimaryKey(CityTable.ID, true)
                 .addTextCols(CityTable.CITY_NAME)
                 .addIntegerCols(CityTable.CITY_CODE)
                 .addIntegerCols(CityTable.PROVINCE_ID)
                 .create())
 
-        db!!.execSQL(SQL.createTable(CountyTable.NAME)
+        db.execSQL(SQL.createTable(CountyTable.NAME)
                 .addIntegerColsWithPrimaryKey(CountyTable.ID, true)
                 .addTextCols(CountyTable.COUNTY_NAME)
                 .addTextCols(CountyTable.WEATHER_ID)
                 .addIntegerCols(CountyTable.CITY_ID)
                 .create())
+        */
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

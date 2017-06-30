@@ -16,14 +16,13 @@ class ForecastDbManager private constructor() {
 
     companion object {
         fun instance(): ForecastDbManager = Inner.instance
-    }
-
-    private object Inner {
-        val instance = ForecastDbManager()
+        private object Inner {
+            val instance = ForecastDbManager()
+        }
     }
 
     init {
-        database = ForecastDbHelper.instance.writableDatabase
+        database = ForecastDbHelper().writableDatabase
     }
 
 
@@ -44,9 +43,10 @@ class ForecastDbManager private constructor() {
             cursor.moveToFirst()
             while(!cursor.isAfterLast) {
                 list.add(Province(mutableMapOf(
-                        "provinceCode" to cursor.getInt(cursor.getColumnIndex(ProvinceTable.PROVINCE_CODE)),
-                        "provinceName" to cursor.getString(cursor.getColumnIndex(ProvinceTable.PROVINCE_NAME))
+                        "provinceName" to cursor.getString(cursor.getColumnIndex(ProvinceTable.PROVINCE_NAME)),
+                        "provinceCode" to cursor.getInt(cursor.getColumnIndex(ProvinceTable.PROVINCE_CODE))
                 )))
+                cursor.moveToNext()
             }
         } finally {
             cursor.close()

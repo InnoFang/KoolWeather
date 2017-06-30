@@ -32,8 +32,8 @@ class HttpUtil {
                             .map { allProvinces.getJSONObject(it) }
                             .map {
                                 Province(mutableMapOf(
-                                        "provinceCode" to it.getString("id"),
-                                        "provinceName" to it.getString("name")
+                                        "provinceName" to it.getString("name"),
+                                        "provinceCode" to it.getInt("id")
                                 ))
                             }
                             .forEach { manager.addData(it) }

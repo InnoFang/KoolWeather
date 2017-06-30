@@ -23,13 +23,11 @@ abstract class BaseFragment : Fragment() {
     @LayoutRes
     protected abstract fun getLayoutResId(): Int
 
-    protected abstract fun createView(savedInstanceState: Bundle)
+    protected abstract fun createView(savedInstanceState: Bundle?)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         view = inflater!!.inflate(getLayoutResId(), container, false)
-        if (savedInstanceState != null) {
-            createView(savedInstanceState)
-        }
+        createView(savedInstanceState)
         return view
     }
 
