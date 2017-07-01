@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import io.innofang.koolweather.App
 import io.innofang.koolweather.R
 import io.innofang.koolweather.base.BaseFragment
 import io.innofang.koolweather.constant.Cons
@@ -63,13 +60,13 @@ class ChooseAreaFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val action = OnRecyclerItemListener(weatherRecyclerView)
-        action.onItemClick = {
-            if (it is ChooseAreaAdapter.ViewHolder) {
-                activity.toast(it.itemTextView.text.toString())
+        weatherRecyclerView.addOnItemTouchListener(object: OnRecyclerItemListener(weatherRecyclerView){
+            override fun onItemClick(vh: RecyclerView.ViewHolder) {
+                if (vh is ChooseAreaAdapter.ViewHolder) {
+                    activity.toast(vh.itemTextView.text.toString())
+                }
             }
-        }
-        weatherRecyclerView.addOnItemTouchListener(action)
+        })
 
         backImageView.setOnClickListener {
             when (currentLevel) {

@@ -11,9 +11,7 @@ import android.view.MotionEvent
  * Description:
  */
 
-class OnRecyclerItemListener(var recyclerView: RecyclerView) : RecyclerView.OnItemTouchListener{
-
-    var onItemClick: ((RecyclerView.ViewHolder) -> Unit )? = null
+abstract class OnRecyclerItemListener(var recyclerView: RecyclerView) : RecyclerView.OnItemTouchListener {
 
     var mGestureDetector: GestureDetectorCompat? = null
 
@@ -34,14 +32,19 @@ class OnRecyclerItemListener(var recyclerView: RecyclerView) : RecyclerView.OnIt
 
     }
 
-    inner class ItemGestureListener: GestureDetector.SimpleOnGestureListener() {
+    inner class ItemGestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
             val child = recyclerView.findChildViewUnder(e!!.x, e!!.y)
-            child?.let { onItemClick?.invoke(recyclerView.getChildViewHolder(child)) }
+            if (null != child) {
+                val vh = recyclerView.getChildViewHolder(child)
+                onItemClick(vh)
+            }
             return true
         }
 
     }
+
+    abstract fun onItemClick(vh: RecyclerView.ViewHolder)
 
 }
