@@ -27,7 +27,7 @@ import io.innofang.koolweather.utils.SQL
                 .addTextCols(ProvinceTable.PROVINCE_NAME)
                 .addIntegerCols(ProvinceTable.PROVINCE_CODE)
                 .create())
-/*
+
         db.execSQL(SQL.createTable(CityTable.NAME)
                 .addIntegerColsWithPrimaryKey(CityTable.ID, true)
                 .addTextCols(CityTable.CITY_NAME)
@@ -41,7 +41,6 @@ import io.innofang.koolweather.utils.SQL
                 .addTextCols(CountyTable.WEATHER_ID)
                 .addIntegerCols(CountyTable.CITY_ID)
                 .create())
-        */
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
