@@ -1,6 +1,8 @@
 package io.innofang.koolweather.utils
 
 import android.text.TextUtils
+import android.util.Log
+import io.innofang.koolweather.db.City
 import io.innofang.koolweather.db.ForecastDbManager
 import io.innofang.koolweather.db.Province
 import okhttp3.OkHttpClient
@@ -24,6 +26,7 @@ class HttpUtil {
         }
 
         fun handleProvinceResponse(response: String): Boolean {
+            Log.i("tag", "response : $response")
             if (!TextUtils.isEmpty(response)) {
                 try {
                     val allProvinces = JSONArray(response)
@@ -45,8 +48,25 @@ class HttpUtil {
             return false
         }
 
-        fun handleCityResponse(response: String): Boolean {
-
+        fun handleCityResponse(response: String, provinceId: Int): Boolean {
+            if (!TextUtils.isEmpty(response)) {
+                try {
+                    val allCities = JSONArray(response)
+                    val manager = ForecastDbManager.instance()
+                    for (i in 0 until allCities.length()) {
+                        val cityObject = allCities.getJSONObject(i)
+                        val city = City(mutableMapOf(
+                                "cityName" to cityObject.getString("name"),
+                                "cityCode" to cityObject.getInt("id"),
+                                "provinceId" to provinceId
+                        ))
+                        manager.addData(city)
+                    }
+                    return true
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
             return false
         }
 

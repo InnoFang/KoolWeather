@@ -17,13 +17,11 @@ class Province(val map: MutableMap<String, Any?>) {
 }
 
 data class City(val map: MutableMap<String, Any?>) {
-    var id: Int by map
-    var cityName: String by map
-    var cityCode: Int by map
+    var cityName  : String by map
+    var cityCode  : Int by map
     var provinceId: Int by map
 
-    constructor(id: Int, cityName: String, cityCode: Int, provinceId: Int) : this(HashMap()) {
-        this.id = id
+    constructor(cityName: String, cityCode: Int, provinceId: Int) : this(HashMap()) {
         this.cityName = cityName
         this.cityCode = cityCode
         this.provinceId = provinceId

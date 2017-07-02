@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import io.innofang.koolweather.R
 import io.innofang.koolweather.base.BaseFragment
 import io.innofang.koolweather.constant.Cons
+import io.innofang.koolweather.db.City
+import io.innofang.koolweather.db.County
 import io.innofang.koolweather.db.ForecastDbManager
+import io.innofang.koolweather.db.Province
 import io.innofang.koolweather.ui.adapter.ChooseAreaAdapter
 import io.innofang.koolweather.utils.HttpUtil
 import io.innofang.koolweather.utils.event.OnRecyclerItemListener
@@ -44,12 +48,29 @@ class ChooseAreaFragment : BaseFragment() {
     private val weatherRecyclerView: RecyclerView
             by lazy { find(R.id.weather_recycler_view) as RecyclerView }
 
+    private var progressDialog: ProgressDialog? = null
     private val dataList = ArrayList<String>()
     private val adapter: ChooseAreaAdapter
             by lazy { ChooseAreaAdapter(dataList) }
-    private var progressDialog: ProgressDialog? = null
 
+    /* 省列表 */
+    private var provinceList: List<Province>? = null
+
+    /* 市列表 */
+    private var cityList: List<City>? = null
+
+    /* 县列表 */
+    private var countyList: List<County>? = null
+
+    /* 选中的省份 */
+    private var selectedProvince: Province? = null
+
+    /* 选中的城市 */
+    private var selectedCity: City? = null
+
+    /* 当前选中的级别 */
     private var currentLevel: Int = 0
+
     override fun getLayoutResId(): Int = R.layout.fragment_choose_area
 
     override fun createView(savedInstanceState: Bundle?) {
@@ -60,10 +81,17 @@ class ChooseAreaFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        weatherRecyclerView.addOnItemTouchListener(object: OnRecyclerItemListener(weatherRecyclerView){
+        weatherRecyclerView.addOnItemTouchListener(object : OnRecyclerItemListener(weatherRecyclerView) {
             override fun onItemClick(vh: RecyclerView.ViewHolder) {
                 if (vh is ChooseAreaAdapter.ViewHolder) {
-                    activity.toast(vh.itemTextView.text.toString())
+//                    activity.toast(provinceList!![vh.adapterPosition].provinceName)
+                    if (currentLevel == LEVEL_PROVINCE) {
+                        selectedProvince = provinceList!![vh.adapterPosition]
+                        queryCities()
+                    } else if (currentLevel == LEVEL_CITY) {
+                        selectedCity = cityList!![vh.adapterPosition]
+                        queryCounties()
+                    }
                 }
             }
         })
@@ -71,10 +99,10 @@ class ChooseAreaFragment : BaseFragment() {
         backImageView.setOnClickListener {
             when (currentLevel) {
                 LEVEL_CITY -> {
-                    queryCity()
+                    queryProvinces()
                 }
                 LEVEL_COUNTY -> {
-                    queryCounty()
+                    queryCities()
                 }
             }
         }
@@ -85,23 +113,35 @@ class ChooseAreaFragment : BaseFragment() {
     private fun queryProvinces() {
         titleTextView.text = "中国"
         backImageView.visibility = View.GONE
-        val list = ForecastDbManager.instance().getProvinces()
-        if (list.isNotEmpty()) {
+        provinceList = ForecastDbManager.instance().getProvinces()
+        if (provinceList!!.isNotEmpty()) {
             dataList.clear()
-            list.forEach { dataList.add(it.provinceName) }
-            adapter.list = dataList
+            provinceList!!.forEach { dataList.add(it.provinceName) }
             adapter.notifyDataSetChanged()
             currentLevel = LEVEL_PROVINCE
         } else {
-            queryFromServer(Cons.URL, PROVINCE)
+            queryFromServer(Cons.URL_PROVINCE, PROVINCE)
         }
     }
 
-    private fun queryCity() {
-
+    private fun queryCities() {
+        titleTextView.text = selectedProvince!!.provinceName
+        backImageView.visibility = View.VISIBLE
+        cityList = ForecastDbManager.instance().getCities(selectedProvince!!)
+        if (cityList!!.isNotEmpty()) {
+            dataList.clear()
+            cityList!!.forEach { dataList.add(it.cityName) }
+            adapter.notifyDataSetChanged()
+            currentLevel = LEVEL_CITY
+        } else {
+            val provinceCode = selectedProvince!!.provinceCode
+            val cityUrl = Cons.URL_CITY(provinceCode.toString())
+            Log.i("tag", cityUrl)
+            queryFromServer(cityUrl, CITY)
+        }
     }
 
-    private fun queryCounty() {
+    private fun queryCounties() {
 
     }
 
@@ -113,7 +153,7 @@ class ChooseAreaFragment : BaseFragment() {
                 var result = false
                 when (type) {
                     PROVINCE -> result = HttpUtil.handleProvinceResponse(responseText)
-                    CITY -> result = HttpUtil.handleCityResponse(responseText)
+                    CITY -> result = HttpUtil.handleCityResponse(responseText, selectedProvince!!.provinceCode)
                     COUNTY -> result = HttpUtil.handleCountyResponse(responseText)
                 }
 
@@ -122,8 +162,8 @@ class ChooseAreaFragment : BaseFragment() {
                         closeProgressDialog()
                         when (type) {
                             PROVINCE -> queryProvinces()
-                            CITY -> queryCity()
-                            COUNTY -> queryCounty()
+                            CITY -> queryCities()
+                            COUNTY -> queryCounties()
                         }
                     }
                 }
