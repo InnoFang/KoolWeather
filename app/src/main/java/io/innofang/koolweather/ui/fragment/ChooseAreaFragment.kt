@@ -145,6 +145,7 @@ class ChooseAreaFragment : BaseFragment() {
         if (countyList!!.isNotEmpty()) {
             dataList.clear()
             countyList!!.forEach { dataList.add(it.countyName) }
+            adapter.notifyDataSetChanged()
             currentLevel = LEVEL_COUNTY
         } else {
             val provinceCode = selectedProvince!!.provinceCode.toString()
