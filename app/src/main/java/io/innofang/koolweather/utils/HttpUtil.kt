@@ -3,6 +3,7 @@ package io.innofang.koolweather.utils
 import android.text.TextUtils
 import android.util.Log
 import io.innofang.koolweather.db.City
+import io.innofang.koolweather.db.County
 import io.innofang.koolweather.db.ForecastDbManager
 import io.innofang.koolweather.db.Province
 import okhttp3.OkHttpClient
@@ -70,8 +71,26 @@ class HttpUtil {
             return false
         }
 
-        fun handleCountyResponse(response: String): Boolean {
-
+        fun handleCountyResponse(response: String, cityId: Int): Boolean {
+            if (!TextUtils.isEmpty(response)) {
+                try {
+                    val allCounties = JSONArray(response)
+                    val manager = ForecastDbManager.instance()
+                    (0 until allCounties.length())
+                            .map { allCounties.getJSONObject(it) }
+                            .map {
+                                County(mutableMapOf(
+                                        "countyName" to it.getString("name"),
+                                        "weatherId" to it.getString("weather_id"),
+                                        "cityId" to cityId
+                                ))
+                            }
+                            .forEach { manager.addData(it) }
+                    return true
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
             return false
         }
     }

@@ -81,6 +81,32 @@ class ForecastDbManager private constructor() {
         return list
     }
 
+    fun getCounties(city: City): List<County> {
+        val list = ArrayList<County>()
+        val cursor = CursorWrapper(database!!.query(
+                CountyTable.NAME,
+                null,
+                "${CountyTable.CITY_ID} = ?",
+                Array<String>(1) { city.cityCode.toString() },
+                null,
+                null,
+                null
+        ))
+
+        cursor.use { cursor ->
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                list.add(County(mutableMapOf(
+                        "countyName" to cursor.getString(cursor.getColumnIndex(CountyTable.COUNTY_NAME)),
+                        "weatherId" to cursor.getString(cursor.getColumnIndex(CountyTable.WEATHER_ID)),
+                        "cityId" to cursor.getInt(cursor.getColumnIndex(CountyTable.CITY_ID))
+                )))
+                cursor.moveToNext()
+            }
+        }
+        return list
+    }
+
     private fun getContentValues(any: Any): ContentValues {
         val values = ContentValues()
         when (any) {
@@ -106,58 +132,6 @@ class ForecastDbManager private constructor() {
             }
         }
         return values
-    }
-
-    private fun queryData(any: Any, whereClause: String, whereArgs: Array<String>): CursorWrapper {
-        when (any) {
-            is Province -> {
-                return CursorWrapper(database!!.query(
-                        ProvinceTable.NAME,
-                        null,
-                        whereClause,
-                        whereArgs,
-                        null,
-                        null,
-                        null
-                ))
-            }
-            is City -> {
-                return CursorWrapper(database!!.query(
-                        CityTable.NAME,
-                        null,
-                        whereClause,
-                        whereArgs,
-                        null,
-                        null,
-                        null
-                ))
-            }
-            else -> {
-                return CursorWrapper(database!!.query(
-                        CountyTable.NAME,
-                        null,
-                        whereClause,
-                        whereArgs,
-                        null,
-                        null,
-                        null
-                ))
-            }
-        }
-    }
-
-    private fun queryData(any: Any): CursorWrapper {
-        when (any) {
-            is Province -> {
-                return CursorWrapper(database!!.rawQuery("select * from " + ProvinceTable.NAME, null))
-            }
-            is City -> {
-                return CursorWrapper(database!!.rawQuery("select * from " + CityTable.NAME, null))
-            }
-            else -> {
-                return CursorWrapper(database!!.rawQuery("select * from " + CountyTable.NAME, null))
-            }
-        }
     }
 
 }

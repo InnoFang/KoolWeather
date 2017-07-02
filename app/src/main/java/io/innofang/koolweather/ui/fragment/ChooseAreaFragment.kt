@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -134,15 +133,24 @@ class ChooseAreaFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
             currentLevel = LEVEL_CITY
         } else {
-            val provinceCode = selectedProvince!!.provinceCode
-            val cityUrl = Cons.URL_CITY(provinceCode.toString())
-            Log.i("tag", cityUrl)
-            queryFromServer(cityUrl, CITY)
+            val provinceCode = selectedProvince!!.provinceCode.toString()
+            queryFromServer(Cons.URL_CITY(provinceCode), CITY)
         }
     }
 
     private fun queryCounties() {
-
+        titleTextView.text = selectedCity!!.cityName
+        backImageView.visibility = View.VISIBLE
+        countyList = ForecastDbManager.instance().getCounties(selectedCity!!)
+        if (countyList!!.isNotEmpty()) {
+            dataList.clear()
+            countyList!!.forEach { dataList.add(it.countyName) }
+            currentLevel = LEVEL_COUNTY
+        } else {
+            val provinceCode = selectedProvince!!.provinceCode.toString()
+            val cityCode = selectedCity!!.cityCode.toString()
+            queryFromServer(Cons.URL_COUNTY(provinceCode, cityCode), COUNTY)
+        }
     }
 
     private fun queryFromServer(url: String, type: String) {
@@ -154,7 +162,7 @@ class ChooseAreaFragment : BaseFragment() {
                 when (type) {
                     PROVINCE -> result = HttpUtil.handleProvinceResponse(responseText)
                     CITY -> result = HttpUtil.handleCityResponse(responseText, selectedProvince!!.provinceCode)
-                    COUNTY -> result = HttpUtil.handleCountyResponse(responseText)
+                    COUNTY -> result = HttpUtil.handleCountyResponse(responseText, selectedCity!!.cityCode)
                 }
 
                 if (result) {
