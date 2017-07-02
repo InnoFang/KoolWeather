@@ -1,4 +1,4 @@
-package io.innofang.koolweather.ui.adapter
+package io.innofang.koolweather.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

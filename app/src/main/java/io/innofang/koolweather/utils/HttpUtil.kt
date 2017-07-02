@@ -2,6 +2,8 @@ package io.innofang.koolweather.utils
 
 import android.text.TextUtils
 import android.util.Log
+import com.google.gson.Gson
+import io.innofang.koolweather.bean.Weather
 import io.innofang.koolweather.db.City
 import io.innofang.koolweather.db.County
 import io.innofang.koolweather.db.ForecastDbManager
@@ -93,6 +95,11 @@ class HttpUtil {
             }
             return false
         }
+
+        fun handleWeatherResponse(response: String): Weather {
+            return Gson().fromJson(response, Weather::class.java)
+        }
+
     }
 
 }
