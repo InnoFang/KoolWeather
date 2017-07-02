@@ -9,9 +9,13 @@ package io.innofang.koolweather.bean
 
 class Weather {
 
-    var heWeather: List<HeWeatherBean>? = null
+    var HeWeather: List<HeWeatherBean>? = null
+
+
 
     class HeWeatherBean {
+
+
         /**
          * aqi : {"city":{"aqi":"27","co":"1","no2":"24","o3":"51","pm10":"27","pm25":"14","qlty":"优","so2":"7"}}
          * basic : {"city":"广州","cnty":"中国","id":"CN101280101","lat":"23.12517738","lon":"113.28063965","update":{"loc":"2017-07-02 13:50","utc":"2017-07-02 05:50"}}

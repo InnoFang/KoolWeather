@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -69,9 +68,8 @@ class WeatherActivity : AppCompatActivity() {
                 val responseText = response!!.body()!!.string()
                 val weather = HttpUtil.handleWeatherResponse(responseText)
                 runOnUiThread {
-                    Log.i("tag", responseText)
-                    Log.i("tag", weather.heWeather!![0].status!!)
-                    if ("ok" == weather.heWeather!![0].status!!) {
+
+                    if ("ok" == weather.HeWeather!![0].status!!) {
                         val editor = PreferenceManager
                                 .getDefaultSharedPreferences(this@WeatherActivity).edit()
                         editor.putString(PREFS_WEATHER, responseText)
@@ -94,13 +92,13 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun showWeatherInfo(weather: Weather) {
-        val heWeather = weather.heWeather!![0]
+        val heWeather = weather.HeWeather!![0]
         val basic = heWeather.basic!!
         val now = heWeather.now!!
 
         titleCityTextView.text = basic.city
         titleUpdateTimeTextView.text = basic.update!!.loc!!.split(" ")[1]
-        degreeTextView.text = now.tmp
+        degreeTextView.text = "${now.tmp}℃"
         weatherInfoTextView.text = now.cond!!.txt
 
         forecastLayout.removeAllViews()
