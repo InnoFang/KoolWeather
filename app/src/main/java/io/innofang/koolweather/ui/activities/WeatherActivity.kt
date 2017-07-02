@@ -5,12 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import com.bumptech.glide.Glide
 import io.innofang.koolweather.R
 import io.innofang.koolweather.bean.Weather
 import io.innofang.koolweather.constant.Cons
@@ -24,13 +23,13 @@ class WeatherActivity : AppCompatActivity() {
     companion object {
         private val EXTRA_WEATHER_ID = "weather_id"
         val PREFS_WEATHER = "weather"
+        val PREFS_BING_PIC = "bing_pic"
         fun start(context: Context, weatherId: String) {
             val intent = Intent(context, WeatherActivity::class.java)
             intent.putExtra(EXTRA_WEATHER_ID, weatherId)
             context.startActivity(intent)
         }
     }
-
 
     private val weatherLayout: ScrollView by lazy { findViewById(R.id.weather_scroll_view) as ScrollView }
     private val titleCityTextView: TextView by lazy { findViewById(R.id.title_city_text_view) as TextView }
@@ -43,7 +42,7 @@ class WeatherActivity : AppCompatActivity() {
     private val comforTextView: TextView by lazy { findViewById(R.id.comfort_text_view) as TextView }
     private val carwashTextView: TextView by lazy { findViewById(R.id.car_wash_text_view) as TextView }
     private val sportTextView: TextView by lazy { findViewById(R.id.sport_text_view) as TextView }
-
+    private val bingPicImageView: ImageView by lazy { findViewById(R.id.bing_pic_image_view) as ImageView }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +57,30 @@ class WeatherActivity : AppCompatActivity() {
             requestWeatherId(weatherId)
         }
 
+        val bingPic = prefs.getString(PREFS_BING_PIC, null)
+        bingPic?.let { Glide.with(this@WeatherActivity).load(bingPic).into(bingPicImageView) }
+                ?: let { loadingBingPic() }
 
+    }
+
+    private fun loadingBingPic() {
+        HttpUtil.sendOkHttpRequest(Cons.URL_BING_PIC, object : okhttp3.Callback {
+            override fun onResponse(call: Call?, response: Response?) {
+                val bingPic = response!!.body()!!.string()
+                val editor = PreferenceManager
+                        .getDefaultSharedPreferences(this@WeatherActivity).edit()
+                editor.putString(PREFS_BING_PIC, bingPic)
+                editor.apply()
+                runOnUiThread {
+                    Glide.with(this@WeatherActivity).load(bingPic).into(bingPicImageView)
+                }
+            }
+
+            override fun onFailure(call: Call?, e: IOException?) {
+                Log.e("tag", "loading bing picture ", e)
+            }
+
+        })
     }
 
     /* 根据天气 Id 请求城市天气信息 */
