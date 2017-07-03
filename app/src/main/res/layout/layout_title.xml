@@ -6,6 +6,15 @@
     android:layout_height="?attr/actionBarSize"
     tools:background="@color/colorPrimary">
 
+    <Button
+        android:id="@+id/nav_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_home"/>
+
     <TextView
         android:id="@+id/title_city_text_view"
         android:layout_width="wrap_content"

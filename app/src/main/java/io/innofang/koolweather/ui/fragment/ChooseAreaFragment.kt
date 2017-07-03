@@ -15,6 +15,7 @@ import io.innofang.koolweather.db.City
 import io.innofang.koolweather.db.County
 import io.innofang.koolweather.db.ForecastDbManager
 import io.innofang.koolweather.db.Province
+import io.innofang.koolweather.ui.activities.MainActivity
 import io.innofang.koolweather.ui.activities.WeatherActivity
 import io.innofang.koolweather.ui.adapters.ChooseAreaAdapter
 import io.innofang.koolweather.utils.HttpUtil
@@ -93,8 +94,15 @@ class ChooseAreaFragment : BaseFragment() {
                         queryCounties()
                     } else if (currentLevel == LEVEL_COUNTY) {
                         val weatherId = countyList!![vh.adapterPosition].weatherId
-                        WeatherActivity.start(activity, weatherId)
-                        activity.finish()
+                        if (activity is MainActivity) {
+                            WeatherActivity.start(activity, weatherId)
+                            activity.finish()
+                        } else if (activity is WeatherActivity) {
+                            val act: WeatherActivity = activity as WeatherActivity
+                            act.drawerLayout.closeDrawers()
+                            act.swipeRefresh.isRefreshing = true
+                            act.requestWeatherId(weatherId)
+                        }
                     }
                 }
             }

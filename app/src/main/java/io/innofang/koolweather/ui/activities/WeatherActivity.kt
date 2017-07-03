@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,6 +47,10 @@ class WeatherActivity : AppCompatActivity() {
     private val carwashTextView: TextView by lazy { findViewById(R.id.car_wash_text_view) as TextView }
     private val sportTextView: TextView by lazy { findViewById(R.id.sport_text_view) as TextView }
     private val bingPicImageView: ImageView by lazy { findViewById(R.id.bing_pic_image_view) as ImageView }
+    private val navButton: Button by lazy { findViewById(R.id.nav_button) as Button }
+    val drawerLayout: DrawerLayout by lazy { findViewById(R.id.drawer_layout) as DrawerLayout }
+    val swipeRefresh: SwipeRefreshLayout by lazy { findViewById(R.id.swipe_refresh_layout) as SwipeRefreshLayout }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,17 +63,30 @@ class WeatherActivity : AppCompatActivity() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity@ this)
         val weatherString = prefs.getString(PREFS_WEATHER, null)
-        weatherString?.let { showWeatherInfo(HttpUtil.handleWeatherResponse(weatherString)) }
+
+        var weatherId: String? = null
+        weatherString
+                ?. let {
+                    // 有缓存时直接解析天气数据
+                    val weather = HttpUtil.handleWeatherResponse(weatherString)
+                    weatherId = weather.HeWeather!![0].basic!!.id
+                    showWeatherInfo(weather)
+                }
                 ?: let {
-            val weatherId = intent.getStringExtra(EXTRA_WEATHER_ID)
-            weatherLayout.visibility = View.VISIBLE
-            requestWeatherId(weatherId)
-        }
+                    // 无缓存时去服务器查询天气
+                    weatherId = intent.getStringExtra(EXTRA_WEATHER_ID)
+                    weatherLayout.visibility = View.VISIBLE
+                    requestWeatherId(weatherId!!)
+                }
 
         val bingPic = prefs.getString(PREFS_BING_PIC, null)
         bingPic?.let { Glide.with(this@WeatherActivity).load(bingPic).into(bingPicImageView) }
                 ?: let { loadingBingPic() }
 
+        navButton.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
+
+        swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
+        swipeRefresh.setOnRefreshListener { weatherId?.let { requestWeatherId(it) } }
     }
 
     private fun loadingBingPic() {
@@ -106,6 +126,7 @@ class WeatherActivity : AppCompatActivity() {
                     } else {
                         toast("获取天气信息失败")
                     }
+                    swipeRefresh.isRefreshing = false
                 }
             }
 
@@ -113,6 +134,7 @@ class WeatherActivity : AppCompatActivity() {
                 e!!.printStackTrace()
                 runOnUiThread {
                     toast("获取天气信息失败")
+                    swipeRefresh.isRefreshing = false
                 }
             }
 
