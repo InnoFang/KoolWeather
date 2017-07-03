@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.innofang.koolweather.R
 import io.innofang.koolweather.base.BaseFragment
-import io.innofang.koolweather.constant.Cons
+import io.innofang.koolweather.constant.Api
 import io.innofang.koolweather.db.City
 import io.innofang.koolweather.db.County
 import io.innofang.koolweather.db.ForecastDbManager
@@ -132,7 +132,7 @@ class ChooseAreaFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
             currentLevel = LEVEL_PROVINCE
         } else {
-            queryFromServer(Cons.URL_PROVINCE, PROVINCE)
+            queryFromServer(Api.URL_PROVINCE, PROVINCE)
         }
     }
 
@@ -147,7 +147,7 @@ class ChooseAreaFragment : BaseFragment() {
             currentLevel = LEVEL_CITY
         } else {
             val provinceCode = selectedProvince!!.provinceCode.toString()
-            queryFromServer(Cons.URL_CITY(provinceCode), CITY)
+            queryFromServer(Api.URL_CITY(provinceCode), CITY)
         }
     }
 
@@ -163,7 +163,7 @@ class ChooseAreaFragment : BaseFragment() {
         } else {
             val provinceCode = selectedProvince!!.provinceCode.toString()
             val cityCode = selectedCity!!.cityCode.toString()
-            queryFromServer(Cons.URL_COUNTY(provinceCode, cityCode), COUNTY)
+            queryFromServer(Api.URL_COUNTY(provinceCode, cityCode), COUNTY)
         }
     }
 

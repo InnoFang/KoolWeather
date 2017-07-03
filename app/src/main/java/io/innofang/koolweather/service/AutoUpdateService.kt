@@ -9,7 +9,7 @@ import android.os.IBinder
 import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.util.Log
-import io.innofang.koolweather.constant.Cons
+import io.innofang.koolweather.constant.Api
 import io.innofang.koolweather.ui.activities.WeatherActivity
 import io.innofang.koolweather.utils.HttpUtil
 import okhttp3.Call
@@ -47,7 +47,7 @@ class AutoUpdateService : Service() {
             val weather = HttpUtil.handleWeatherResponse(weatherString)
             val weatherId = weather.HeWeather!![0].basic!!.id
 
-            HttpUtil.sendOkHttpRequest(Cons.URL_WEATHER(weatherId!!), object : okhttp3.Callback {
+            HttpUtil.sendOkHttpRequest(Api.URL_WEATHER(weatherId!!), object : okhttp3.Callback {
                 override fun onResponse(call: Call?, response: Response?) {
                     val responseText = response!!.body()!!.string()
                     val weather = HttpUtil.handleWeatherResponse(responseText)
@@ -73,7 +73,7 @@ class AutoUpdateService : Service() {
      * 更新必应每日一图
      */
     private fun updateBingPic() {
-        HttpUtil.sendOkHttpRequest(Cons.URL_BING_PIC, object : okhttp3.Callback {
+        HttpUtil.sendOkHttpRequest(Api.URL_BING_PIC, object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
                 val bingPic = response!!.body()!!.string()
                 val editor = PreferenceManager

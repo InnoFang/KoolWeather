@@ -6,7 +6,7 @@ package io.innofang.koolweather.constant
  * Description:
  */
 
-class Cons {
+class Api {
     companion object {
         val URL_PROVINCE = "http://guolin.tech/api/china"
         val URL_CITY: (String) -> String = { provinceCode -> "$URL_PROVINCE/$provinceCode"}

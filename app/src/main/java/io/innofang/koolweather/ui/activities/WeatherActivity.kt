@@ -16,7 +16,7 @@ import android.widget.*
 import com.bumptech.glide.Glide
 import io.innofang.koolweather.R
 import io.innofang.koolweather.bean.Weather
-import io.innofang.koolweather.constant.Cons
+import io.innofang.koolweather.constant.Api
 import io.innofang.koolweather.service.AutoUpdateService
 import io.innofang.koolweather.utils.HttpUtil
 import okhttp3.Call
@@ -92,7 +92,7 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     private fun loadingBingPic() {
-        HttpUtil.sendOkHttpRequest(Cons.URL_BING_PIC, object : okhttp3.Callback {
+        HttpUtil.sendOkHttpRequest(Api.URL_BING_PIC, object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
                 val bingPic = response!!.body()!!.string()
                 val editor = PreferenceManager
@@ -114,7 +114,7 @@ class WeatherActivity : AppCompatActivity() {
     /* 根据天气 Id 请求城市天气信息 */
     fun requestWeatherId(id: String) {
 
-        HttpUtil.sendOkHttpRequest(Cons.URL_WEATHER(id), object : okhttp3.Callback {
+        HttpUtil.sendOkHttpRequest(Api.URL_WEATHER(id), object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
                 val responseText = response!!.body()!!.string()
                 val weather = HttpUtil.handleWeatherResponse(responseText)
