@@ -30,8 +30,8 @@ data class City(val map: MutableMap<String, Any?>) {
 
 data class County(val map: MutableMap<String, Any?>) {
     var countyName: String by map
-    var weatherId : String by map
-    var cityId    : Int by map
+    var weatherId: String by map
+    var cityId: Int by map
 
     constructor(countyName: String, weatherId: String, cityId: Int) : this(HashMap()) {
         this.countyName = countyName

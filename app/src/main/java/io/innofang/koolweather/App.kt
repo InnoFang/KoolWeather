@@ -9,7 +9,7 @@ import kotlin.properties.Delegates
  * Description:
  */
 
-class App: Application() {
+class App : Application() {
 
     companion object {
         var instance: App by Delegates.notNull()

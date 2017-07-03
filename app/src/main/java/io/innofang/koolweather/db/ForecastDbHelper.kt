@@ -12,7 +12,7 @@ import io.innofang.koolweather.utils.SQL
  * Description:
  */
 
- class ForecastDbHelper(ctx: Context = App.instance)
+class ForecastDbHelper(ctx: Context = App.instance)
     : SQLiteOpenHelper(ctx, ForecastDbHelper.DB_NAME, null, ForecastDbHelper.DB_VERSION) {
 
     companion object {

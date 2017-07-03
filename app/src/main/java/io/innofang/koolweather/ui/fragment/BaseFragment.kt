@@ -1,4 +1,4 @@
-package io.innofang.koolweather.base
+package io.innofang.koolweather.ui.fragment
 
 import android.content.Context
 import android.os.Bundle

@@ -14,7 +14,7 @@ class Api {
         val URL_PROVINCE = "http://guolin.tech/api/china"
 
         val URL_CITY: (String) -> String
-                = { provinceCode -> "$URL_PROVINCE/$provinceCode"}
+                = { provinceCode -> "$URL_PROVINCE/$provinceCode" }
 
         val URL_COUNTY: (String, String) -> String
                 = { provinceCode, cityCode -> "$URL_PROVINCE/$provinceCode/$cityCode" }

@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import io.innofang.koolweather.R
-import io.innofang.koolweather.base.BaseFragment
 import io.innofang.koolweather.constant.Api
 import io.innofang.koolweather.db.City
 import io.innofang.koolweather.db.County
@@ -85,7 +84,7 @@ class ChooseAreaFragment : BaseFragment() {
         weatherRecyclerView.addOnItemTouchListener(object : OnRecyclerItemListener(weatherRecyclerView) {
             override fun onItemClick(vh: RecyclerView.ViewHolder) {
                 if (vh is ChooseAreaAdapter.ViewHolder) {
-//                    activity.toast(provinceList!![vh.adapterPosition].provinceName)
+
                     if (currentLevel == LEVEL_PROVINCE) {
                         selectedProvince = provinceList!![vh.adapterPosition]
                         queryCities()

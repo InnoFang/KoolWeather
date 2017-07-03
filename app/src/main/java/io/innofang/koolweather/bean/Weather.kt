@@ -12,7 +12,6 @@ class Weather {
     var HeWeather: List<HeWeatherBean>? = null
 
 
-
     class HeWeatherBean {
 
 

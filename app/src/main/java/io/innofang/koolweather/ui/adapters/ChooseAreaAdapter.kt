@@ -12,7 +12,7 @@ import android.widget.TextView
  * Description:
  */
 
-class ChooseAreaAdapter(var list: List<String>): RecyclerView.Adapter<ChooseAreaAdapter.ViewHolder>() {
+class ChooseAreaAdapter(var list: List<String>) : RecyclerView.Adapter<ChooseAreaAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -26,7 +26,7 @@ class ChooseAreaAdapter(var list: List<String>): RecyclerView.Adapter<ChooseArea
 
     override fun getItemCount(): Int = list.size
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemTextView: TextView by lazy { itemView.findViewById(android.R.id.text1) as TextView }
 
         fun bindHolder(text: String) {

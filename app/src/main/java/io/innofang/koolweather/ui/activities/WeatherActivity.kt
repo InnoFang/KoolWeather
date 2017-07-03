@@ -68,18 +68,18 @@ class WeatherActivity : AppCompatActivity() {
 
 
         weatherString
-                ?. let {
+                ?.let {
                     // 有缓存时直接解析天气数据
                     val weather = HttpUtil.handleWeatherResponse(weatherString)
                     weatherId = weather.HeWeather!![0].basic!!.id
                     showWeatherInfo(weather)
                 }
                 ?: let {
-                    // 无缓存时去服务器查询天气
-                    weatherId = intent.getStringExtra(EXTRA_WEATHER_ID)
-                    weatherLayout.visibility = View.VISIBLE
-                    requestWeatherId(weatherId!!)
-                }
+            // 无缓存时去服务器查询天气
+            weatherId = intent.getStringExtra(EXTRA_WEATHER_ID)
+            weatherLayout.visibility = View.VISIBLE
+            requestWeatherId(weatherId!!)
+        }
 
         val bingPic = prefs.getString(PREFS_BING_PIC, null)
         bingPic?.let { Glide.with(this@WeatherActivity).load(bingPic).into(bingPicImageView) }
