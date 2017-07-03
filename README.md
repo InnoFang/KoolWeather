@@ -1,5 +1,7 @@
 # KoolWeather
 
+English | [中文](https://github.com/InnoFang/KoolWeather/blob/master/README_zh.md)
+
 ![koolWeather](https://raw.githubusercontent.com/InnoFang/KoolWeather/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png?token=AO_t-kx8NfcY3s9ihkWE2m3QLgzHDJN6ks5ZYx9bwA%3D%3D)
 
 Using Kotlin to build weather app.
@@ -11,9 +13,9 @@ In this porject, I just use the Kotlin (without using Anko) to rebuild the [Cook
 ## Third-party library
 
 ```gradle
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
+compile 'com.google.code.gson:gson:2.2.4'
+compile 'com.squareup.okhttp3:okhttp:3.8.1'
+compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
 ```
 
 ## Reference

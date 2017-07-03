@@ -13,9 +13,9 @@
 ## 第三方库
 
 ```gradle
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
+compile 'com.google.code.gson:gson:2.2.4'
+compile 'com.squareup.okhttp3:okhttp:3.8.1'
+compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
 ```
 
 ## 参考
