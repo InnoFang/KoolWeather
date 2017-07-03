@@ -8,7 +8,7 @@ Using Kotlin to build weather app.
 
 In this porject, I just use the Kotlin (without using Anko) to rebuild the [CookWeather](https://github.com/guolindev/coolweather), moreover I don't use the [LitePal](https://github.com/LitePalFramework/LitePal) (a third-party Database library) but use the SQLite to store my local data , which wall allow you to learn how to use kotlin to access SQLite. On the other hand, I demonstrated the basic usage of Kotlin and some tips. If you have a better suggestion welcome to pull request or issur for me.
 
-#### Third-party library
+## Third-party library
 
 ```gradle
     compile 'com.google.code.gson:gson:2.2.4'
@@ -16,12 +16,12 @@ In this porject, I just use the Kotlin (without using Anko) to rebuild the [Cook
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
 ```
 
-#### Reference
+## Reference
 
  + [CoolWeather](https://github.com/guolindev/coolweather)
 
  + [Kotlin-for-Android-Developers](https://github.com/antoniolg/Kotlin-for-Android-Developers)
 
-#### LICENSE
+## LICENSE
 
- [Apache License 2.0](https://github.com/InnoFang/O.K./blob/master/LICENSE)
+ [Apache License 2.0](https://github.com/InnoFang/KoolWeather/blob/master/LICENSE)
