@@ -51,6 +51,7 @@ class WeatherActivity : AppCompatActivity() {
     val drawerLayout: DrawerLayout by lazy { findViewById(R.id.drawer_layout) as DrawerLayout }
     val swipeRefresh: SwipeRefreshLayout by lazy { findViewById(R.id.swipe_refresh_layout) as SwipeRefreshLayout }
 
+    var weatherId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +65,7 @@ class WeatherActivity : AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity@ this)
         val weatherString = prefs.getString(PREFS_WEATHER, null)
 
-        var weatherId: String? = null
+
         weatherString
                 ?. let {
                     // 有缓存时直接解析天气数据
@@ -111,6 +112,7 @@ class WeatherActivity : AppCompatActivity() {
 
     /* 根据天气 Id 请求城市天气信息 */
     fun requestWeatherId(weatherId: String) {
+        this.weatherId = weatherId
         HttpUtil.sendOkHttpRequest(Cons.URL_WEATHER(weatherId), object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
                 val responseText = response!!.body()!!.string()
