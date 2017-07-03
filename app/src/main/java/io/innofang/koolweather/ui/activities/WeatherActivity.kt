@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import io.innofang.koolweather.R
 import io.innofang.koolweather.bean.Weather
 import io.innofang.koolweather.constant.Cons
+import io.innofang.koolweather.service.AutoUpdateService
 import io.innofang.koolweather.utils.HttpUtil
 import okhttp3.Call
 import okhttp3.Response
@@ -26,8 +27,8 @@ class WeatherActivity : AppCompatActivity() {
 
     companion object {
         private val EXTRA_WEATHER_ID = "weather_id"
-        val PREFS_WEATHER = "weather"
-        val PREFS_BING_PIC = "bing_pic"
+        const val PREFS_WEATHER = "weather"
+        const val PREFS_BING_PIC = "bing_pic"
         fun start(context: Context, weatherId: String) {
             val intent = Intent(context, WeatherActivity::class.java)
             intent.putExtra(EXTRA_WEATHER_ID, weatherId)
@@ -111,9 +112,9 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     /* 根据天气 Id 请求城市天气信息 */
-    fun requestWeatherId(weatherId: String) {
-        this.weatherId = weatherId
-        HttpUtil.sendOkHttpRequest(Cons.URL_WEATHER(weatherId), object : okhttp3.Callback {
+    fun requestWeatherId(id: String) {
+
+        HttpUtil.sendOkHttpRequest(Cons.URL_WEATHER(id), object : okhttp3.Callback {
             override fun onResponse(call: Call?, response: Response?) {
                 val responseText = response!!.body()!!.string()
                 val weather = HttpUtil.handleWeatherResponse(responseText)
@@ -124,6 +125,7 @@ class WeatherActivity : AppCompatActivity() {
                                 .getDefaultSharedPreferences(this@WeatherActivity).edit()
                         editor.putString(PREFS_WEATHER, responseText)
                         editor.apply()
+                        weatherId = id
                         showWeatherInfo(weather)
                     } else {
                         toast("获取天气信息失败")
@@ -133,7 +135,7 @@ class WeatherActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call?, e: IOException?) {
-                e!!.printStackTrace()
+                Log.e("tag", "loading weather ", e)
                 runOnUiThread {
                     toast("获取天气信息失败")
                     swipeRefresh.isRefreshing = false
@@ -164,8 +166,8 @@ class WeatherActivity : AppCompatActivity() {
 
             dateTextView.text = it.date
             infoTextView.text = it.cond!!.txt_d
-            maxTextView.text = it.tmp!!.max
-            minTextView.text = it.tmp!!.min
+            maxTextView.text = "${it.tmp!!.max}℃"
+            minTextView.text = "${it.tmp!!.min}℃"
             forecastLayout.addView(view)
         }
 
@@ -179,6 +181,8 @@ class WeatherActivity : AppCompatActivity() {
         sportTextView.text = "舒适度：${heWeather.suggestion!!.sport!!.txt}"
 
         weatherLayout.visibility = View.VISIBLE
+
+        startService(Intent(this@WeatherActivity, AutoUpdateService::class.java))
     }
 
     fun Context.toast(text: String = "", time: Int = Toast.LENGTH_SHORT) {
