@@ -2,7 +2,7 @@
 
 English | [中文](https://github.com/InnoFang/KoolWeather/blob/master/README_zh.md)
 
-![koolWeather](https://raw.githubusercontent.com/InnoFang/KoolWeather/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png?token=AO_t-kx8NfcY3s9ihkWE2m3QLgzHDJN6ks5ZYx9bwA%3D%3D)
+![koolWeather](https://raw.githubusercontent.com/InnoFang/KoolWeather/master/app/src/main/res/mipmap-xxhdpi/ic_launcher.png)
 
 Using Kotlin to build weather app.
 
