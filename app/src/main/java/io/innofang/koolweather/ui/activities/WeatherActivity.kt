@@ -19,6 +19,8 @@ import io.innofang.koolweather.bean.Weather
 import io.innofang.koolweather.constant.Api
 import io.innofang.koolweather.service.AutoUpdateService
 import io.innofang.koolweather.utils.HttpUtil
+import io.innofang.koolweather.utils.find
+import io.innofang.koolweather.utils.toast
 import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
@@ -36,21 +38,21 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
-    private val weatherLayout: ScrollView by lazy { findViewById(R.id.weather_scroll_view) as ScrollView }
-    private val titleCityTextView: TextView by lazy { findViewById(R.id.title_city_text_view) as TextView }
-    private val titleUpdateTimeTextView: TextView by lazy { findViewById(R.id.title_update_time_text_view) as TextView }
-    private val degreeTextView: TextView by lazy { findViewById(R.id.now_degree_text_view) as TextView }
-    private val weatherInfoTextView: TextView by lazy { findViewById(R.id.now_weather_info_text_view) as TextView }
-    private val forecastLayout: LinearLayout by lazy { findViewById(R.id.forecast_layout) as LinearLayout }
-    private val aqiTextView: TextView by lazy { findViewById(R.id.aqi_text_view) as TextView }
-    private val pm25TextView: TextView by lazy { findViewById(R.id.pm25_text_view) as TextView }
-    private val comforTextView: TextView by lazy { findViewById(R.id.comfort_text_view) as TextView }
-    private val carwashTextView: TextView by lazy { findViewById(R.id.car_wash_text_view) as TextView }
-    private val sportTextView: TextView by lazy { findViewById(R.id.sport_text_view) as TextView }
-    private val bingPicImageView: ImageView by lazy { findViewById(R.id.bing_pic_image_view) as ImageView }
-    private val navButton: Button by lazy { findViewById(R.id.nav_button) as Button }
-    val drawerLayout: DrawerLayout by lazy { findViewById(R.id.drawer_layout) as DrawerLayout }
-    val swipeRefresh: SwipeRefreshLayout by lazy { findViewById(R.id.swipe_refresh_layout) as SwipeRefreshLayout }
+    private val weatherLayout by lazy { find<ScrollView>(R.id.weather_scroll_view) }
+    private val titleCityTextView by lazy { find<TextView>(R.id.title_city_text_view) }
+    private val titleUpdateTimeTextView by lazy { find<TextView>(R.id.title_update_time_text_view) }
+    private val degreeTextView by lazy { find<TextView>(R.id.now_degree_text_view) }
+    private val weatherInfoTextView by lazy { find<TextView>(R.id.now_weather_info_text_view) }
+    private val forecastLayout by lazy { find<LinearLayout>(R.id.forecast_layout) }
+    private val aqiTextView by lazy { find<TextView>(R.id.aqi_text_view) }
+    private val pm25TextView by lazy { find<TextView>(R.id.pm25_text_view) }
+    private val comforTextView by lazy { find<TextView>(R.id.comfort_text_view) }
+    private val carWashTextView by lazy { find<TextView>(R.id.car_wash_text_view) }
+    private val sportTextView by lazy { find<TextView>(R.id.sport_text_view) }
+    private val bingPicImageView by lazy { find<ImageView>(R.id.bing_pic_image_view) }
+    private val navButton by lazy { find<Button>(R.id.nav_button) }
+    val drawerLayout by lazy { find<DrawerLayout>(R.id.drawer_layout) }
+    val swipeRefresh by lazy { find<SwipeRefreshLayout>(R.id.swipe_refresh_layout) }
 
     var weatherId: String? = null
 
@@ -177,15 +179,11 @@ class WeatherActivity : AppCompatActivity() {
         }
 
         comforTextView.text = "舒适度：${heWeather.suggestion!!.comf!!.txt}"
-        carwashTextView.text = "汽车指数：${heWeather.suggestion!!.cw!!.txt}"
+        carWashTextView.text = "汽车指数：${heWeather.suggestion!!.cw!!.txt}"
         sportTextView.text = "舒适度：${heWeather.suggestion!!.sport!!.txt}"
 
         weatherLayout.visibility = View.VISIBLE
 
         startService(Intent(this@WeatherActivity, AutoUpdateService::class.java))
-    }
-
-    fun Context.toast(text: String = "", time: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, text, time).show()
     }
 }

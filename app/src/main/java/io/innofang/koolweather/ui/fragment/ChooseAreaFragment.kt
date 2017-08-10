@@ -6,7 +6,6 @@ import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import io.innofang.koolweather.R
 import io.innofang.koolweather.constant.Api
@@ -19,6 +18,8 @@ import io.innofang.koolweather.ui.activities.WeatherActivity
 import io.innofang.koolweather.ui.adapters.ChooseAreaAdapter
 import io.innofang.koolweather.utils.HttpUtil
 import io.innofang.koolweather.utils.event.OnRecyclerItemListener
+import io.innofang.koolweather.utils.find
+import io.innofang.koolweather.utils.toast
 import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
@@ -41,17 +42,13 @@ class ChooseAreaFragment : BaseFragment() {
         val COUNTY = "county"
     }
 
-    private val titleTextView: TextView
-            by lazy { find(R.id.title_text_view) as TextView }
-    private val backImageView: ImageView
-            by lazy { find(R.id.back_image_view) as AppCompatImageView }
-    private val weatherRecyclerView: RecyclerView
-            by lazy { find(R.id.weather_recycler_view) as RecyclerView }
+    private val titleTextView by lazy { find<TextView>(R.id.title_text_view) }
+    private val backImageView by lazy { find<AppCompatImageView>(R.id.back_image_view) }
+    private val weatherRecyclerView by lazy { find<RecyclerView>(R.id.weather_recycler_view) }
 
     private var progressDialog: ProgressDialog? = null
     private val dataList = ArrayList<String>()
-    private val adapter: ChooseAreaAdapter
-            by lazy { ChooseAreaAdapter(dataList) }
+    private val adapter by lazy { ChooseAreaAdapter(dataList) }
 
     /* 省列表 */
     private var provinceList: List<Province>? = null
@@ -193,7 +190,7 @@ class ChooseAreaFragment : BaseFragment() {
             override fun onFailure(call: Call?, e: IOException?) {
                 activity.runOnUiThread {
                     closeProgressDialog()
-                    activity.toast("加载失败")
+                    toast("加载失败")
                 }
             }
 

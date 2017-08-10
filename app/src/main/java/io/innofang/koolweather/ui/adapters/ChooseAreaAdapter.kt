@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.innofang.koolweather.utils.find
 
 /**
  * Author: Inno Fang
@@ -27,7 +28,7 @@ class ChooseAreaAdapter(var list: List<String>) : RecyclerView.Adapter<ChooseAre
     override fun getItemCount(): Int = list.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemTextView: TextView by lazy { itemView.findViewById(android.R.id.text1) as TextView }
+        val itemTextView by lazy { itemView.find<TextView>(android.R.id.text1) }
 
         fun bindHolder(text: String) {
             itemTextView.text = text
