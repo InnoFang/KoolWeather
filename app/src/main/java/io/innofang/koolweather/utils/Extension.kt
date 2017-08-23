@@ -17,8 +17,6 @@ inline fun <reified T : View> Activity.find(@IdRes id: Int): T = findViewById(id
 
 inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id) as T
 
-inline fun <reified T : View> Fragment.find(@IdRes id: Int): T = view?.findViewById(id) as T
-
 fun Context.toast(resId: Int, duration: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, resId, duration).show()
 
 fun Context.toast(text: String = "", time: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, text, time).show()

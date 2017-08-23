@@ -32,9 +32,11 @@ class WeatherActivity : AppCompatActivity() {
         const val PREFS_WEATHER = "weather"
         const val PREFS_BING_PIC = "bing_pic"
         fun start(context: Context, weatherId: String) {
-            val intent = Intent(context, WeatherActivity::class.java)
-            intent.putExtra(EXTRA_WEATHER_ID, weatherId)
-            context.startActivity(intent)
+            Intent(context, WeatherActivity::class.java).apply {
+                putExtra(EXTRA_WEATHER_ID, weatherId)
+            }.let {
+                context.startActivity(it)
+            }
         }
     }
 
