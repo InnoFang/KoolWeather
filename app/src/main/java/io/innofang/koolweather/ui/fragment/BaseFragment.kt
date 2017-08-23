@@ -21,12 +21,12 @@ abstract class BaseFragment : Fragment() {
     @LayoutRes
     protected abstract fun getLayoutResId(): Int
 
-    protected abstract fun createView(savedInstanceState: Bundle?)
+    protected abstract fun createView(view: View, savedInstanceState: Bundle?)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater!!.inflate(getLayoutResId(), container, false)
-        createView(savedInstanceState)
-        return view
+        createView(mView, savedInstanceState)
+        return mView
     }
 
     inline fun <reified T: View> find(@IdRes id: Int): T = mView.findViewById(id) as T

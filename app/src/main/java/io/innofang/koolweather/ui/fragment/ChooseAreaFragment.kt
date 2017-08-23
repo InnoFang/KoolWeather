@@ -42,8 +42,8 @@ class ChooseAreaFragment : BaseFragment() {
     }
 
     private val titleTextView by lazy { find<TextView>(R.id.title_text_view) }
-    private lateinit var backImageView: AppCompatImageView
-    private lateinit var weatherRecyclerView: RecyclerView
+    private val backImageView by lazy { find<AppCompatImageView>(R.id.back_image_view) }
+    private val weatherRecyclerView by lazy { find<RecyclerView>(R.id.weather_recycler_view) }
 
     private val dataList = ArrayList<String>()
     private val mAdapter by lazy { ChooseAreaAdapter(dataList) }
@@ -74,11 +74,10 @@ class ChooseAreaFragment : BaseFragment() {
 
     override fun getLayoutResId(): Int = R.layout.fragment_choose_area
 
-    override fun createView(savedInstanceState: Bundle?) {
-        weatherRecyclerView = find<RecyclerView>(R.id.weather_recycler_view).apply {
+    override fun createView(view: View, savedInstanceState: Bundle?) {
+        with(weatherRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
-
             addOnItemTouchListener(object : OnRecyclerItemListener(weatherRecyclerView) {
                 override fun onItemClick(vh: RecyclerView.ViewHolder) {
                     if (vh is ChooseAreaAdapter.ViewHolder) {
@@ -105,12 +104,8 @@ class ChooseAreaFragment : BaseFragment() {
                 }
             })
         }
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        backImageView = find<AppCompatImageView>(R.id.back_image_view).apply {
+        with(backImageView) {
             setOnClickListener {
                 when (currentLevel) {
                     LEVEL_CITY -> queryProvinces()
@@ -120,7 +115,6 @@ class ChooseAreaFragment : BaseFragment() {
             queryProvinces()
         }
     }
-
 
     private fun queryProvinces() {
         titleTextView.text = "中国"
