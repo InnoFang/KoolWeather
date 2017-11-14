@@ -2,10 +2,14 @@ package io.innofang.koolweather.ui.fragment
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.v4.app.Fragment
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import io.innofang.koolweather.R
 import io.innofang.koolweather.constant.Api
@@ -30,7 +34,7 @@ import java.util.*
  * Description:
  */
 
-class ChooseAreaFragment : BaseFragment() {
+class ChooseAreaFragment : Fragment() {
 
     companion object {
         val LEVEL_PROVINCE = 0
@@ -40,6 +44,10 @@ class ChooseAreaFragment : BaseFragment() {
         val CITY = "city"
         val COUNTY = "county"
     }
+
+    lateinit var mView: View
+
+    inline fun <reified T: View> find(@IdRes id: Int): T = mView.findViewById(id) as T
 
     private val titleTextView by lazy { find<TextView>(R.id.title_text_view) }
     private val backImageView by lazy { find<AppCompatImageView>(R.id.back_image_view) }
@@ -72,9 +80,13 @@ class ChooseAreaFragment : BaseFragment() {
     /* 当前选中的级别 */
     private var currentLevel: Int = 0
 
-    override fun getLayoutResId(): Int = R.layout.fragment_choose_area
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mView = inflater?.inflate(R.layout.fragment_choose_area, container, false) as View
+        return mView
+    }
 
-    override fun createView(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(weatherRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter

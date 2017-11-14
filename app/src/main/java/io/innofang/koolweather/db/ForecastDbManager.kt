@@ -40,7 +40,7 @@ class ForecastDbManager private constructor() {
         val list = ArrayList<Province>()
         val cursor = CursorWrapper(database!!.rawQuery("select * from " + ProvinceTable.NAME, null))
 
-        try {
+        cursor.use { cursor ->
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 list.add(Province(mutableMapOf(
@@ -49,8 +49,6 @@ class ForecastDbManager private constructor() {
                 )))
                 cursor.moveToNext()
             }
-        } finally {
-            cursor.close()
         }
         return list
     }

@@ -13,19 +13,19 @@ import android.view.MotionEvent
 
 abstract class OnRecyclerItemListener(var recyclerView: RecyclerView) : RecyclerView.OnItemTouchListener {
 
-    var mGestureDetector: GestureDetectorCompat? = null
+    var mGestureDetector: GestureDetectorCompat
 
     init {
         mGestureDetector = GestureDetectorCompat(recyclerView.context, ItemGestureListener())
     }
 
     override fun onInterceptTouchEvent(rv: RecyclerView?, e: MotionEvent?): Boolean {
-        mGestureDetector?.onTouchEvent(e)
+        mGestureDetector.onTouchEvent(e)
         return false
     }
 
     override fun onTouchEvent(rv: RecyclerView?, e: MotionEvent?) {
-        mGestureDetector?.onTouchEvent(e)
+        mGestureDetector.onTouchEvent(e)
     }
 
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
@@ -35,7 +35,7 @@ abstract class OnRecyclerItemListener(var recyclerView: RecyclerView) : Recycler
     inner class ItemGestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            val child = recyclerView.findChildViewUnder(e!!.x, e!!.y)
+            val child = recyclerView.findChildViewUnder(e!!.x, e.y)
             if (null != child) {
                 val vh = recyclerView.getChildViewHolder(child)
                 onItemClick(vh)

@@ -23,7 +23,7 @@ object SQL {
     private val DOUBLE = " double "
     private val CHAR = " char(10) "
     private val TEXT = " text "
-    private var mSql: StringBuilder? = null
+    private lateinit var mSql: StringBuilder
 
     fun createTable(tableName: String): SQLBuilder {
         return SQLBuilder(tableName)
@@ -32,22 +32,23 @@ object SQL {
     class SQLBuilder(tableName: String) {
 
         init {
-            mSql = StringBuilder()
-            mSql!!.append("create table if not exists ")
-                    .append(tableName)
-                    .append(LEFT_BRACKET)
+            mSql = StringBuilder().apply {
+                append("create table if not exists ")
+                        .append(tableName)
+                        .append(LEFT_BRACKET)
+            }
         }
 
         fun addIntegerCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(INTEGER)
             return this
         }
 
         fun addIntegerColsWithPrimaryKey(cols: String, useAutoincrement: Boolean): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(INTEGER)
                     .append(PRIMARY_KEY)
             checkAutoincrement(useAutoincrement)
@@ -56,21 +57,21 @@ object SQL {
 
         fun addVarCharCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(VARCHAR)
             return this
         }
 
         fun addVarCharCols(cols: String, length: Int): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(" varchar($length) ")
             return this
         }
 
         fun addVarCharColsWithPrimaryKey(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(VARCHAR)
                     .append(PRIMARY_KEY)
             return this
@@ -78,7 +79,7 @@ object SQL {
 
         fun addVarCharColsWithPrimaryKey(cols: String, length: Int): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(" varchar($length) ")
                     .append(PRIMARY_KEY)
             return this
@@ -87,14 +88,14 @@ object SQL {
 
         fun addCharCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(CHAR)
             return this
         }
 
         fun addCharCols(cols: String, length: Int): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(" varchar($length) ")
             return this
         }
@@ -102,7 +103,7 @@ object SQL {
 
         fun addCharColsWithPrimaryKey(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(CHAR)
                     .append(PRIMARY_KEY)
             return this
@@ -110,7 +111,7 @@ object SQL {
 
         fun addCharColsWithPrimaryKey(cols: String, length: Int): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(" char($length) ")
                     .append(PRIMARY_KEY)
             return this
@@ -119,14 +120,14 @@ object SQL {
 
         fun addFloatCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(FLOAT)
             return this
         }
 
         fun addFloatColsWithPrimaryKey(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(FLOAT)
                     .append(PRIMARY_KEY)
             return this
@@ -135,14 +136,14 @@ object SQL {
 
         fun addDoubleCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(DOUBLE)
             return this
         }
 
         fun addDoubleColsWithPrimaryKey(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(DOUBLE)
                     .append(PRIMARY_KEY)
             return this
@@ -150,14 +151,14 @@ object SQL {
 
         fun addTextCols(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(TEXT)
             return this
         }
 
         fun addTextColsWithPrimaryKey(cols: String): SQLBuilder {
             checkComma()
-            mSql!!.append(cols)
+            mSql.append(cols)
                     .append(TEXT)
                     .append(PRIMARY_KEY)
             return this
@@ -165,21 +166,21 @@ object SQL {
 
 
         fun create(): String {
-            return mSql!!.append(RIGHT_BRACKET)
+            return mSql.append(RIGHT_BRACKET)
                     .toString()
                     .replace("  ", " ")
         }
     }
 
     private fun checkComma() {
-        if (mSql!![mSql!!.length - 1] != LEFT_BRACKET[0]) {
-            mSql!!.append(COMMA)
+        if (mSql[mSql.length - 1] != LEFT_BRACKET[0]) {
+            mSql.append(COMMA)
         }
     }
 
     private fun checkAutoincrement(useAutoincrement: Boolean) {
         if (useAutoincrement)
-            mSql!!.append(AUTOINCREMENT)
+            mSql.append(AUTOINCREMENT)
     }
 
 }
