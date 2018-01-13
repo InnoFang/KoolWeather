@@ -47,7 +47,7 @@ class ChooseAreaFragment : Fragment() {
 
     lateinit var mView: View
 
-    inline fun <reified T: View> find(@IdRes id: Int): T = mView.findViewById(id) as T
+    inline fun <reified T : View> find(@IdRes id: Int): T = mView.findViewById(id)
 
     private val titleTextView by lazy { find<TextView>(R.id.title_text_view) }
     private val backImageView by lazy { find<AppCompatImageView>(R.id.back_image_view) }
@@ -81,8 +81,7 @@ class ChooseAreaFragment : Fragment() {
     private var currentLevel: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mView = inflater?.inflate(R.layout.fragment_choose_area, container, false) as View
-        return mView
+        return inflater?.inflate(io.innofang.koolweather.R.layout.fragment_choose_area, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -93,23 +92,26 @@ class ChooseAreaFragment : Fragment() {
             addOnItemTouchListener(object : OnRecyclerItemListener(weatherRecyclerView) {
                 override fun onItemClick(vh: RecyclerView.ViewHolder) {
                     if (vh is ChooseAreaAdapter.ViewHolder) {
-
-                        if (currentLevel == LEVEL_PROVINCE) {
-                            selectedProvince = provinceList!![vh.adapterPosition]
-                            queryCities()
-                        } else if (currentLevel == LEVEL_CITY) {
-                            selectedCity = cityList!![vh.adapterPosition]
-                            queryCounties()
-                        } else if (currentLevel == LEVEL_COUNTY) {
-                            val weatherId = countyList!![vh.adapterPosition].weatherId
-                            if (activity is MainActivity) {
-                                WeatherActivity.start(activity, weatherId)
-                                activity.finish()
-                            } else if (activity is WeatherActivity) {
-                                val act: WeatherActivity = activity as WeatherActivity
-                                act.drawerLayout.closeDrawers()
-                                act.swipeRefresh.isRefreshing = true
-                                act.requestWeatherId(weatherId)
+                        when (currentLevel) {
+                            LEVEL_PROVINCE -> {
+                                selectedProvince = provinceList!![vh.adapterPosition]
+                                queryCities()
+                            }
+                            LEVEL_CITY -> {
+                                selectedCity = cityList!![vh.adapterPosition]
+                                queryCounties()
+                            }
+                            LEVEL_COUNTY -> {
+                                val weatherId = countyList!![vh.adapterPosition].weatherId
+                                if (activity is MainActivity) {
+                                    WeatherActivity.start(activity, weatherId)
+                                    activity.finish()
+                                } else if (activity is WeatherActivity) {
+                                    val act: WeatherActivity = activity as WeatherActivity
+                                    act.drawerLayout.closeDrawers()
+                                    act.swipeRefresh.isRefreshing = true
+                                    act.requestWeatherId(weatherId)
+                                }
                             }
                         }
                     }
@@ -176,7 +178,7 @@ class ChooseAreaFragment : Fragment() {
     private fun queryFromServer(url: String, type: String) {
         showProgressDialog()
         HttpUtil.sendOkHttpRequest(url, object : okhttp3.Callback {
-            override fun onResponse(call: Call?, response: Response?) {
+            override fun onResponse(call: okhttp3.Call?, response: Response?) {
                 val responseText = response!!.body()!!.string()
                 var result = false
                 when (type) {
@@ -207,11 +209,9 @@ class ChooseAreaFragment : Fragment() {
         })
     }
 
-    private fun showProgressDialog() {
-        progressDialog.show()
-    }
+    private fun showProgressDialog() = progressDialog.show()
 
-    private fun closeProgressDialog() {
-        progressDialog.dismiss()
-    }
+
+    private fun closeProgressDialog() = progressDialog.dismiss()
+
 }

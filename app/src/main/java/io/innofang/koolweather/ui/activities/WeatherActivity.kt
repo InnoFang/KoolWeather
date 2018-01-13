@@ -163,10 +163,11 @@ class WeatherActivity : AppCompatActivity() {
         heWeather.daily_forecast!!.forEach {
             val view = LayoutInflater.from(this@WeatherActivity)
                     .inflate(R.layout.item_forecast, forecastLayout, false)
-            val dateTextView = view.findViewById(R.id.date_text_view) as TextView
-            val infoTextView = view.findViewById(R.id.info_text_view) as TextView
-            val maxTextView = view.findViewById(R.id.max_text_view) as TextView
-            val minTextView = view.findViewById(R.id.min_text_view) as TextView
+
+            val dateTextView = view.find<TextView>(R.id.date_text_view)
+            val infoTextView = view.find<TextView>(R.id.info_text_view)
+            val maxTextView = view.find<TextView>(R.id.max_text_view)
+            val minTextView = view.find<TextView>(R.id.min_text_view)
 
             dateTextView.text = it.date
             infoTextView.text = it.cond!!.txt_d

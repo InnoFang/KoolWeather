@@ -13,9 +13,9 @@ import android.widget.Toast
  * Description:
  */
 
-inline fun <reified T : View> Activity.find(@IdRes id: Int): T = findViewById(id) as T
+inline fun <reified T : View> Activity.find(@IdRes id: Int): T = findViewById(id)
 
-inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id) as T
+inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id)
 
 fun Context.toast(resId: Int, duration: Int = Toast.LENGTH_SHORT) = Toast.makeText(this, resId, duration).show()
 
