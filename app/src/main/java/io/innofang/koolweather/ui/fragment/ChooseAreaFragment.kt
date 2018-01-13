@@ -23,7 +23,6 @@ import io.innofang.koolweather.ui.adapters.ChooseAreaAdapter
 import io.innofang.koolweather.utils.HttpUtil
 import io.innofang.koolweather.utils.event.OnRecyclerItemListener
 import io.innofang.koolweather.utils.toast
-import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
 import java.util.*
@@ -47,7 +46,7 @@ class ChooseAreaFragment : Fragment() {
 
     lateinit var mView: View
 
-    inline fun <reified T : View> find(@IdRes id: Int): T = mView.findViewById(id)
+    inline fun <reified T: View> find(@IdRes id: Int): T = mView.findViewById(id)
 
     private val titleTextView by lazy { find<TextView>(R.id.title_text_view) }
     private val backImageView by lazy { find<AppCompatImageView>(R.id.back_image_view) }
@@ -81,7 +80,8 @@ class ChooseAreaFragment : Fragment() {
     private var currentLevel: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(io.innofang.koolweather.R.layout.fragment_choose_area, container, false)
+        mView = inflater?.inflate(R.layout.fragment_choose_area, container, false) as View
+        return mView
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -199,7 +199,7 @@ class ChooseAreaFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call?, e: IOException?) {
+            override fun onFailure(call: okhttp3.Call?, e: IOException?) {
                 activity.runOnUiThread {
                     closeProgressDialog()
                     toast("加载失败")
@@ -209,9 +209,11 @@ class ChooseAreaFragment : Fragment() {
         })
     }
 
-    private fun showProgressDialog() = progressDialog.show()
+    private fun showProgressDialog() {
+        progressDialog.show()
+    }
 
-
-    private fun closeProgressDialog() = progressDialog.dismiss()
-
+    private fun closeProgressDialog() {
+        progressDialog.dismiss()
+    }
 }
